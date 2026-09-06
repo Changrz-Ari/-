@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
@@ -342,6 +342,22 @@
   if (location.protocol === 'file:') {
     document.documentElement.innerHTML = '<head><meta charset="utf-8"><title>请通过本地服务打开</title></head><body style="margin:0;background:#f8fafc;color:#0f172a;font:16px system-ui"><main style="max-width:640px;margin:12vh auto;padding:32px;background:#fff;border:1px solid #dbe4ef;border-radius:12px"><h1 style="margin-top:0">请通过本地服务打开工作台</h1><p>当前 file:// 打开方式会阻止模块与演示资料正常加载，不能用于正式数据操作。</p><pre style="padding:14px;background:#f1f5f9;border-radius:8px;overflow:auto">cd "' + location.pathname.split('/app/')[0] + '"\npython3 -m http.server 8000</pre><p>随后访问 <a href="http://localhost:8000/app/">http://localhost:8000/app/</a>。</p></main></body>';
   }
+
+  // 退出登录
+  function handleLogout() {
+    if (!confirm('确定要退出登录吗？')) return;
+    const account = localStorage.getItem('cscec_account') || '';
+    try {
+      const logs = JSON.parse(localStorage.getItem('cscec_operation_logs') || '[]');
+      logs.unshift({ id: Date.now(), account, action: '退出登录', detail: '', timestamp: new Date().toLocaleString('zh-CN') });
+      if (logs.length > 500) logs.length = 500;
+      localStorage.setItem('cscec_operation_logs', JSON.stringify(logs));
+    } catch(e) {}
+    localStorage.removeItem('cscec_logged_in');
+    localStorage.removeItem('cscec_account');
+    localStorage.removeItem('cscec_role');
+    window.location.href = '../';
+  }
 </script>
 
 <div class="flex h-screen app-shell">
@@ -416,6 +432,10 @@
         </button>
         <button onclick="window.__app.exportAll()" class="h-9 w-9 flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-700 shrink-0 border border-slate-200 bg-white" title="导出备份" aria-label="导出备份">
           <span class="material-symbols-outlined icon-action" aria-hidden="true">download</span>
+        </button>
+        <button onclick="handleLogout()" class="h-9 px-3 text-sm flex items-center gap-1.5 text-slate-600 hover:bg-red-50 hover:text-red-600 shrink-0 border border-slate-200 bg-white" title="退出登录" aria-label="退出登录">
+          <span class="material-symbols-outlined icon-action" aria-hidden="true">logout</span>
+          <span>退出</span>
         </button>
       </div>
     </header>
