@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
@@ -11,272 +11,242 @@
 
   /* 背景轮播 */
   .bg-slider {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 0;
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; z-index: 0;
   }
   .bg-slide {
-    position: absolute;
-    top: 0; left: 0;
+    position: absolute; top: 0; left: 0;
     width: 100%; height: 100%;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    transition: opacity 1.5s ease-in-out;
+    background-size: cover; background-position: center;
+    opacity: 0; transition: opacity 1.5s ease-in-out;
   }
   .bg-slide.active { opacity: 1; }
   .bg-overlay {
-    position: fixed;
-    top: 0; left: 0;
+    position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
-    background: linear-gradient(135deg, rgba(0, 40, 80, 0.55) 0%, rgba(0, 80, 120, 0.45) 100%);
+    background: linear-gradient(135deg, rgba(0, 20, 50, 0.6) 0%, rgba(0, 40, 80, 0.5) 100%);
     z-index: 1;
   }
 
-  /* 顶部导航 */
-  .top-bar {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 10;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: #fff;
-    text-decoration: none;
-  }
-  .brand-logo {
-    width: 40px; height: 40px;
-    border-radius: 8px;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  .brand-logo img { width: 100%; height: 100%; object-fit: cover; }
-  .brand-text { font-size: 18px; font-weight: 600; letter-spacing: 1px; }
-
-  /* 主容器 */
+  /* 主容器：左右分栏 */
   .main-container {
-    position: relative;
-    z-index: 5;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+    position: relative; z-index: 2;
+    display: flex; width: 100%; height: 100vh;
   }
 
-  /* 毛玻璃登录卡片 */
-  .login-card {
-    width: 100%;
-    max-width: 440px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 20px;
-    padding: 40px 36px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  }
-
-  .login-header {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  .login-title {
-    font-size: 24px;
-    font-weight: 700;
+  /* 左侧品牌区 */
+  .brand-section {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: space-between; padding: 50px 60px;
     color: #fff;
-    margin-bottom: 8px;
-    letter-spacing: 1px;
   }
-  .login-subtitle {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
+  .brand-header { display: flex; align-items: center; gap: 14px; }
+  .brand-logo { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; }
+  .brand-title { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+  .brand-subtitle { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 3px; }
+
+  .brand-content { max-width: 560px; }
+  .brand-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 16px; border-radius: 20px;
+    background: rgba(255,255,255,0.12); backdrop-filter: blur(10px);
+    font-size: 13px; color: rgba(255,255,255,0.9); margin-bottom: 28px;
+  }
+  .brand-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #f5c542; }
+  .brand-headline { font-size: 56px; font-weight: 800; line-height: 1.2; margin-bottom: 24px; }
+  .brand-headline .text-gold { color: #f5c542; display: block; }
+  .brand-desc {
+    font-size: 15px; line-height: 1.8; color: rgba(255,255,255,0.8);
+    margin-bottom: 36px;
+  }
+  .brand-features { display: flex; gap: 14px; flex-wrap: wrap; }
+  .feature-item {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 8px;
+    background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.12);
+    font-size: 14px; color: rgba(255,255,255,0.9);
+  }
+  .feature-item .icon { font-size: 16px; }
+
+  .brand-footer {
+    font-size: 13px; color: rgba(255,255,255,0.5);
+    display: flex; gap: 24px;
   }
 
-  /* 登录方式切换 */
+  /* 右侧登录区 */
+  .login-section {
+    width: 520px; display: flex; align-items: center; justify-content: center;
+    padding: 40px;
+  }
+  .login-card {
+    width: 100%; max-width: 420px;
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 16px; padding: 40px 36px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .login-header { text-align: center; margin-bottom: 28px; }
+  .login-title { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .login-subtitle { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+  /* 登录方式Tab */
   .login-tabs {
-    display: flex;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 4px;
-    margin-bottom: 24px;
+    display: flex; background: rgba(255,255,255,0.08);
+    border-radius: 10px; padding: 4px; margin-bottom: 24px;
   }
   .login-tab {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
-    cursor: pointer;
-    border-radius: 8px;
-    transition: all 0.3s;
-    border: none;
-    background: transparent;
+    flex: 1; padding: 10px 0; text-align: center;
+    font-size: 14px; color: rgba(255,255,255,0.6);
+    background: transparent; border: none; border-radius: 8px;
+    cursor: pointer; transition: all 0.2s;
   }
   .login-tab.active {
-    background: rgba(255, 255, 255, 0.25);
-    color: #fff;
-    font-weight: 600;
+    background: #2563eb; color: #fff; font-weight: 600;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.4);
   }
 
   /* 表单 */
-  .form-group {
-    margin-bottom: 18px;
-  }
+  .form-group { margin-bottom: 18px; }
   .form-label {
-    display: block;
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.85);
-    margin-bottom: 8px;
-    font-weight: 500;
+    display: block; font-size: 13px; color: rgba(255,255,255,0.8);
+    margin-bottom: 8px; font-weight: 500;
+  }
+  .input-wrapper { position: relative; }
+  .input-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 16px; opacity: 0.5;
+  }
+  .input-icon-right {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 16px; opacity: 0.5; cursor: pointer;
   }
   .form-input {
-    width: 100%;
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 10px;
-    color: #fff;
-    font-size: 14px;
-    outline: none;
-    transition: all 0.3s;
+    width: 100%; padding: 12px 14px 12px 42px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px; font-size: 14px; color: #fff;
+    outline: none; transition: all 0.2s;
   }
-  .form-input::placeholder { color: rgba(255, 255, 255, 0.5); }
+  .form-input::placeholder { color: rgba(255,255,255,0.4); }
   .form-input:focus {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: #3b82f6; background: rgba(255,255,255,0.12);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
   }
 
-  /* 验证码输入 */
-  .code-input-group {
-    display: flex;
-    gap: 10px;
-  }
+  .code-input-group { display: flex; gap: 10px; }
   .code-input-group .form-input { flex: 1; }
   .code-btn {
-    padding: 12px 18px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 10px;
-    color: #fff;
-    font-size: 13px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.3s;
+    padding: 0 16px; background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 10px;
+    color: rgba(255,255,255,0.8); font-size: 13px; cursor: pointer;
+    white-space: nowrap; transition: all 0.2s;
   }
-  .code-btn:hover { background: rgba(255, 255, 255, 0.3); }
+  .code-btn:hover { background: rgba(255,255,255,0.15); }
   .code-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* 登录选项 */
+  .login-options {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px;
+  }
+  .remember-me {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: rgba(255,255,255,0.7); cursor: pointer;
+  }
+  .remember-me input { accent-color: #3b82f6; }
+  .forgot-password {
+    font-size: 13px; color: #f5c542; text-decoration: none;
+  }
+  .forgot-password:hover { text-decoration: underline; }
 
   /* 登录按钮 */
   .login-btn {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #0066b3 0%, #004c8c 100%);
-    border: none;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-top: 8px;
-    letter-spacing: 2px;
+    width: 100%; padding: 13px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 600; color: #fff;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.4);
   }
-  .login-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(0, 102, 179, 0.4);
-  }
+  .login-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,0.5); }
 
-  /* 管理员入口 */
-  .admin-entry {
-    text-align: center;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
+  /* 注册入口 */
+  .register-entry { text-align: center; margin-top: 18px; }
+  .register-link {
+    font-size: 13px; color: rgba(255,255,255,0.6); cursor: pointer;
   }
-  .admin-link {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 13px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: color 0.3s;
-  }
-  .admin-link:hover { color: #fff; }
+  .register-link:hover { color: #fff; text-decoration: underline; }
 
-  /* 提示信息 */
+  /* 分割线 */
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 24px 0 18px;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: rgba(255,255,255,0.15);
+  }
+  .divider span { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+  /* 管理员入口按钮 */
+  .admin-entry-btn {
+    width: 100%; padding: 11px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
+    font-size: 14px; color: rgba(255,255,255,0.8);
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .admin-entry-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .admin-icon { font-size: 16px; }
+
+  /* 提示消息 */
   .tip-message {
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 13px;
-    margin-bottom: 16px;
-    display: none;
+    padding: 10px 14px; border-radius: 8px; font-size: 13px;
+    margin-bottom: 16px; display: none;
   }
-  .tip-message.info {
-    background: rgba(0, 102, 179, 0.3);
-    border: 1px solid rgba(0, 102, 179, 0.5);
-    color: #fff;
-    display: block;
-  }
-  .tip-message.error {
-    background: rgba(220, 53, 69, 0.3);
-    border: 1px solid rgba(220, 53, 69, 0.5);
-    color: #fff;
-    display: block;
-  }
+  .tip-message.show { display: block; }
+  .tip-message.error { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+  .tip-message.success { background: rgba(34,197,94,0.15); color: #86efac; border: 1px solid rgba(34,197,94,0.3); }
+  .tip-message.info { background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
 
-  /* 底部 */
-  .footer {
-    position: fixed;
-    bottom: 0; left: 0;
-    width: 100%;
-    padding: 16px;
-    text-align: center;
-    z-index: 10;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 12px;
-  }
-
-  /* 管理员登录面板 */
-  .admin-panel { display: none; }
-  .admin-panel.active { display: block; }
+  /* 面板切换 */
   .user-panel { display: block; }
   .user-panel.hidden { display: none; }
-
-  /* 注册面板 */
+  .admin-panel { display: none; }
+  .admin-panel.active { display: block; }
   .register-panel { display: none; }
   .register-panel.active { display: block; }
 
-  /* 注册入口 */
-  .register-entry { margin-top: 16px; text-align: center; }
-  .register-link { color: #3b82f6; font-size: 13px; cursor: pointer; }
-  .register-link:hover { color: #2563eb; text-decoration: underline; }
-
   .back-link {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 13px;
-    cursor: pointer;
-    margin-bottom: 16px;
-    display: inline-block;
+    display: inline-flex; align-items: center; gap: 4px;
+    color: rgba(255,255,255,0.6); font-size: 13px;
+    cursor: pointer; margin-bottom: 20px;
   }
   .back-link:hover { color: #fff; }
 
+  /* 轮播指示器 */
+  .carousel-indicators {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 8px; z-index: 10;
+  }
+  .indicator {
+    width: 24px; height: 4px; border-radius: 2px;
+    background: rgba(255,255,255,0.3); cursor: pointer; transition: all 0.3s;
+  }
+  .indicator.active { background: #f5c542; width: 32px; }
+
   /* 响应式 */
+  @media (max-width: 1024px) {
+    .brand-section { display: none; }
+    .login-section { width: 100%; }
+  }
   @media (max-width: 480px) {
+    .login-section { padding: 20px; }
     .login-card { padding: 30px 24px; }
-    .top-bar { padding: 16px 20px; }
-    .brand-text { font-size: 15px; }
+    .brand-headline { font-size: 40px; }
   }
 </style>
 </head>
@@ -293,177 +263,216 @@
 </div>
 <div class="bg-overlay"></div>
 
-<!-- 顶部导航 -->
-<div class="top-bar">
-  <a class="brand" href="#">
-    <div class="brand-logo"><img src="app/favicon.png" alt="CSCEC" /></div>
-    <span class="brand-text">中建八局文旅博览公司</span>
-  </a>
-</div>
-
 <!-- 主容器 -->
 <div class="main-container">
-  <div class="login-card">
-
-    <!-- 用户登录面板 -->
-    <div class="user-panel" id="userPanel">
-      <div class="login-header">
-        <div class="login-title">工程造价数据管理平台</div>
-        <div class="login-subtitle">请登录以继续使用</div>
+  <!-- 左侧品牌区 -->
+  <div class="brand-section">
+    <div class="brand-header">
+      <img src="app/favicon.png" class="brand-logo" alt="CSCEC" />
+      <div>
+        <div class="brand-title">工程造价数据管理平台</div>
+        <div class="brand-subtitle">中建八局文旅博览 · 商务管理部</div>
       </div>
+    </div>
 
-      <div class="tip-message" id="tipMessage"></div>
-
-      <!-- 登录方式切换 -->
-      <div class="login-tabs">
-        <button class="login-tab active" data-type="phone" onclick="switchLoginType('phone')">手机号登录</button>
-        <button class="login-tab" data-type="email" onclick="switchLoginType('email')">邮箱登录</button>
+    <div class="brand-content">
+      <div class="brand-tag">工程造价 · 数据管理平台</div>
+      <h1 class="brand-headline">
+        铸造精品
+        <span class="text-gold">文旅博览</span>
+      </h1>
+      <p class="brand-desc">
+        基于工程造价数据管理标准，以数字化方式呈现清单定额、材料价格、案例指标，
+        助力商务人员快速掌握造价要点，提升项目履约品质。
+      </p>
+      <div class="brand-features">
+        <div class="feature-item"><span class="icon">📊</span> 清单定额管理</div>
+        <div class="feature-item"><span class="icon">💰</span> 材料价格参考</div>
+        <div class="feature-item"><span class="icon">📈</span> 案例指标分析</div>
       </div>
+    </div>
 
-      <!-- 登录模式切换 -->
-      <div class="login-tabs" style="margin-bottom: 20px;">
-        <button class="login-tab active" data-mode="code" onclick="switchLoginMode('code')">验证码登录</button>
-        <button class="login-tab" data-mode="password" onclick="switchLoginMode('password')">密码登录</button>
-      </div>
+    <div class="brand-footer">
+      <span>© 2026 中建八局文旅博览投资发展有限公司</span>
+      <span>技术支持：信息化中心</span>
+    </div>
+  </div>
 
-      <form id="loginForm" onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label class="form-label" id="accountLabel">手机号</label>
-          <input type="text" class="form-input" id="accountInput" placeholder="请输入手机号" required />
+  <!-- 右侧登录区 -->
+  <div class="login-section">
+    <div class="login-card">
+      <!-- 用户登录面板 -->
+      <div class="user-panel" id="userPanel">
+        <div class="login-header">
+          <div class="login-title">欢迎登录</div>
+          <div class="login-subtitle">请使用您的账号登录工程造价数据管理平台</div>
         </div>
 
-        <div class="form-group" id="codeGroup">
-          <label class="form-label">验证码</label>
-          <div class="code-input-group">
-            <input type="text" class="form-input" id="codeInput" placeholder="请输入验证码" maxlength="6" />
-            <button type="button" class="code-btn" id="sendCodeBtn" onclick="sendCode()">获取验证码</button>
+        <div class="login-tabs">
+          <button class="login-tab active" data-mode="account" onclick="switchLoginMode('account')">账号密码登录</button>
+          <button class="login-tab" data-mode="phone" onclick="switchLoginMode('phone')">手机/邮箱登录</button>
+        </div>
+
+        <div class="tip-message" id="tipMessage"></div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <!-- 账号密码登录 -->
+          <div id="accountLogin">
+            <div class="form-group">
+              <label class="form-label">用户名</label>
+              <div class="input-wrapper">
+                <span class="input-icon">👤</span>
+                <input type="text" class="form-input" id="usernameInput" placeholder="请输入用户名" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">密码</label>
+              <div class="input-wrapper">
+                <span class="input-icon">🔒</span>
+                <input type="password" class="form-input" id="passwordInput" placeholder="请输入密码" />
+                <span class="input-icon-right" onclick="togglePassword()">👁</span>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group" id="passwordGroup" style="display: none;">
-          <label class="form-label">密码</label>
-          <input type="password" class="form-input" id="passwordInput" placeholder="请输入密码" />
-        </div>
-
-        <button type="submit" class="login-btn">登 录</button>
-      </form>
-
-      <div class="register-entry">
-        <span class="register-link" onclick="showRegisterPanel()">没有账号？立即注册 →</span>
-      </div>
-
-      <div class="admin-entry">
-        <span class="admin-link" onclick="showAdminPanel()">管理员登录 →</span>
-      </div>
-    </div>
-
-    <!-- 管理员登录面板 -->
-    <div class="admin-panel" id="adminPanel">
-      <span class="back-link" onclick="showUserPanel()">← 返回用户登录</span>
-      <div class="login-header">
-        <div class="login-title">管理员登录</div>
-        <div class="login-subtitle">仅限系统管理员使用</div>
-      </div>
-
-      <div class="tip-message" id="adminTipMessage"></div>
-
-      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
-        <div class="form-group">
-          <label class="form-label">管理员账号</label>
-          <input type="text" class="form-input" id="adminAccount" placeholder="请输入管理员账号" required />
-        </div>
-        <div class="form-group">
-          <label class="form-label">管理员密码</label>
-          <input type="password" class="form-input" id="adminPassword" placeholder="请输入管理员密码" required />
-        </div>
-        <button type="submit" class="login-btn">管理员登录</button>
-      </form>
-    </div>
-
-    <!-- 注册面板 -->
-    <div class="register-panel" id="registerPanel">
-      <span class="back-link" onclick="showUserPanel()">← 返回登录</span>
-      <div class="login-header">
-        <div class="login-title">用户注册</div>
-        <div class="login-subtitle">创建您的账号</div>
-      </div>
-
-      <div class="tip-message" id="registerTipMessage"></div>
-
-      <form id="registerForm" onsubmit="handleRegister(event)">
-        <div class="form-group">
-          <label class="form-label">注册方式</label>
-          <div class="login-tabs" style="margin-bottom: 15px;">
-            <button type="button" class="login-tab active" data-reg-type="phone" onclick="switchRegType('phone')">手机号注册</button>
-            <button type="button" class="login-tab" data-reg-type="email" onclick="switchRegType('email')">邮箱注册</button>
+          <!-- 手机/邮箱登录 -->
+          <div id="phoneLogin" style="display: none;">
+            <div class="form-group">
+              <label class="form-label">手机号/邮箱</label>
+              <div class="input-wrapper">
+                <span class="input-icon">📱</span>
+                <input type="text" class="form-input" id="accountInput" placeholder="请输入手机号或邮箱" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">验证码</label>
+              <div class="code-input-group">
+                <input type="text" class="form-input" id="codeInput" placeholder="请输入验证码" maxlength="6" style="padding-left: 14px;" />
+                <button type="button" class="code-btn" id="sendCodeBtn" onclick="sendCode()">获取验证码</button>
+              </div>
+            </div>
           </div>
+
+          <div class="login-options">
+            <label class="remember-me">
+              <input type="checkbox" id="rememberMe" /> 记住我
+            </label>
+            <a href="#" class="forgot-password" onclick="event.preventDefault(); showTip('请联系管理员重置密码', 'info');">忘记密码？</a>
+          </div>
+
+          <button type="submit" class="login-btn">登 录 →</button>
+        </form>
+
+        <div class="register-entry">
+          <span class="register-link" onclick="showRegisterPanel()">没有账号？立即注册</span>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" id="regAccountLabel">手机号</label>
-          <input type="text" class="form-input" id="regAccountInput" placeholder="请输入手机号" required />
-        </div>
+        <div class="divider"><span>其他入口</span></div>
 
-        <div class="form-group">
-          <label class="form-label">设置密码</label>
-          <input type="password" class="form-input" id="regPasswordInput" placeholder="请设置密码（至少6位）" required />
-        </div>
+        <button class="admin-entry-btn" onclick="showAdminPanel()">
+          <span class="admin-icon">🛡</span> 管理员入口
+        </button>
+      </div>
 
-        <div class="form-group">
-          <label class="form-label">确认密码</label>
-          <input type="password" class="form-input" id="regConfirmPasswordInput" placeholder="请再次输入密码" required />
+      <!-- 管理员登录面板 -->
+      <div class="admin-panel" id="adminPanel">
+        <span class="back-link" onclick="showUserPanel()">← 返回用户登录</span>
+        <div class="login-header">
+          <div class="login-title">管理员登录</div>
+          <div class="login-subtitle">仅限系统管理员使用</div>
         </div>
+        <div class="tip-message" id="adminTipMessage"></div>
+        <form id="adminLoginForm" onsubmit="handleAdminLogin(event)">
+          <div class="form-group">
+            <label class="form-label">管理员账号</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input type="text" class="form-input" id="adminAccount" placeholder="请输入管理员账号" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">管理员密码</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input type="password" class="form-input" id="adminPassword" placeholder="请输入管理员密码" />
+            </div>
+          </div>
+          <button type="submit" class="login-btn" style="margin-top: 10px;">管理员登录 →</button>
+        </form>
+      </div>
 
-        <button type="submit" class="login-btn">注 册</button>
-      </form>
+      <!-- 注册面板 -->
+      <div class="register-panel" id="registerPanel">
+        <span class="back-link" onclick="showUserPanel()">← 返回登录</span>
+        <div class="login-header">
+          <div class="login-title">用户注册</div>
+          <div class="login-subtitle">创建您的账号</div>
+        </div>
+        <div class="tip-message" id="registerTipMessage"></div>
+        <form id="registerForm" onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label">注册方式</label>
+            <div class="login-tabs">
+              <button type="button" class="login-tab active" data-reg-type="phone" onclick="switchRegType('phone')">手机号注册</button>
+              <button type="button" class="login-tab" data-reg-type="email" onclick="switchRegType('email')">邮箱注册</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="regAccountLabel">手机号</label>
+            <div class="input-wrapper">
+              <span class="input-icon">📱</span>
+              <input type="text" class="form-input" id="regAccountInput" placeholder="请输入手机号" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">设置密码</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input type="password" class="form-input" id="regPasswordInput" placeholder="请设置密码（至少6位）" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">确认密码</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input type="password" class="form-input" id="regConfirmPasswordInput" placeholder="请再次输入密码" />
+            </div>
+          </div>
+          <button type="submit" class="login-btn" style="margin-top: 10px;">注 册 →</button>
+        </form>
+      </div>
     </div>
-
   </div>
 </div>
 
-<!-- 底部 -->
-<div class="footer">
-  © 2026 中建八局文旅博览投资发展有限公司 · 工程造价数据管理平台
+<!-- 轮播指示器 -->
+<div class="carousel-indicators" id="carouselIndicators">
+  <span class="indicator active" onclick="goToSlide(0)"></span>
+  <span class="indicator" onclick="goToSlide(1)"></span>
+  <span class="indicator" onclick="goToSlide(2)"></span>
+  <span class="indicator" onclick="goToSlide(3)"></span>
+  <span class="indicator" onclick="goToSlide(4)"></span>
+  <span class="indicator" onclick="goToSlide(5)"></span>
 </div>
 
 <script>
   // ===== 用户系统工具函数 =====
-  // 获取所有用户
-  function getAllUsers() {
-    return JSON.parse(localStorage.getItem('cscec_users') || '{}');
-  }
-  // 保存用户信息
+  function getAllUsers() { return JSON.parse(localStorage.getItem('cscec_users') || '{}'); }
   function saveUser(account, data) {
     const users = getAllUsers();
     users[account] = { ...users[account], ...data };
     localStorage.setItem('cscec_users', JSON.stringify(users));
   }
-  // 记录操作日志
   function logOperation(account, action, detail = '') {
     const logs = JSON.parse(localStorage.getItem('cscec_operation_logs') || '[]');
-    logs.unshift({
-      id: Date.now(),
-      account,
-      action,
-      detail,
-      timestamp: new Date().toLocaleString('zh-CN'),
-    });
+    logs.unshift({ id: Date.now(), account, action, detail, timestamp: new Date().toLocaleString('zh-CN') });
     if (logs.length > 500) logs.length = 500;
     localStorage.setItem('cscec_operation_logs', JSON.stringify(logs));
   }
-  // 初始化默认管理员账号
   (function initAdmin() {
     const users = getAllUsers();
     if (!users['admin']) {
-      users['admin'] = {
-        account: 'admin',
-        password: 'admin123',
-        phone: '',
-        email: '',
-        role: 'admin',
-        createdAt: new Date().toLocaleString('zh-CN'),
-        lastLogin: '',
-      };
+      users['admin'] = { account: 'admin', password: 'admin123', phone: '', email: '', role: 'admin', createdAt: new Date().toLocaleString('zh-CN'), lastLogin: '' };
       localStorage.setItem('cscec_users', JSON.stringify(users));
     }
   })();
@@ -471,151 +480,117 @@
   // 背景轮播
   let currentSlide = 0;
   const slides = document.querySelectorAll('.bg-slide');
-  setInterval(() => {
+  const indicators = document.querySelectorAll('.indicator');
+  function goToSlide(index) {
     slides[currentSlide].classList.remove('active');
-    currentSlide = (currentSlide + 1) % slides.length;
+    indicators[currentSlide].classList.remove('active');
+    currentSlide = index;
     slides[currentSlide].classList.add('active');
-  }, 5000);
+    indicators[currentSlide].classList.add('active');
+  }
+  setInterval(() => { goToSlide((currentSlide + 1) % slides.length); }, 5000);
 
   // 登录状态
-  let loginType = 'phone'; // phone / email
-  let loginMode = 'code';  // code / password
+  let loginMode = 'account'; // account / phone
+  let regType = 'phone';
   let generatedCode = '';
-  let regType = 'phone';   // 注册方式
 
-  // 切换登录方式（手机号/邮箱）
-  function switchLoginType(type) {
-    loginType = type;
-    document.querySelectorAll('.login-tab[data-type]').forEach(tab => {
-      tab.classList.toggle('active', tab.dataset.type === type);
-    });
-    const label = document.getElementById('accountLabel');
-    const input = document.getElementById('accountInput');
-    if (type === 'phone') {
-      label.textContent = '手机号';
-      input.placeholder = '请输入手机号';
-      input.type = 'tel';
-    } else {
-      label.textContent = '邮箱';
-      input.placeholder = '请输入邮箱';
-      input.type = 'email';
-    }
-  }
-
-  // 切换登录模式（验证码/密码）
+  // 切换登录方式
   function switchLoginMode(mode) {
     loginMode = mode;
     document.querySelectorAll('.login-tab[data-mode]').forEach(tab => {
       tab.classList.toggle('active', tab.dataset.mode === mode);
     });
-    document.getElementById('codeGroup').style.display = mode === 'code' ? 'block' : 'none';
-    document.getElementById('passwordGroup').style.display = mode === 'password' ? 'block' : 'none';
+    document.getElementById('accountLogin').style.display = mode === 'account' ? 'block' : 'none';
+    document.getElementById('phoneLogin').style.display = mode === 'phone' ? 'block' : 'none';
+  }
+
+  // 切换注册方式
+  function switchRegType(type) {
+    regType = type;
+    document.querySelectorAll('.login-tab[data-reg-type]').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.regType === type);
+    });
+    const label = document.getElementById('regAccountLabel');
+    const input = document.getElementById('regAccountInput');
+    if (type === 'phone') { label.textContent = '手机号'; input.placeholder = '请输入手机号'; }
+    else { label.textContent = '邮箱'; input.placeholder = '请输入邮箱'; }
   }
 
   // 显示提示
   function showTip(msg, type = 'info') {
     const tip = document.getElementById('tipMessage');
-    tip.textContent = msg;
-    tip.className = 'tip-message ' + type;
+    tip.textContent = msg; tip.className = 'tip-message show ' + type;
   }
   function showAdminTip(msg, type = 'info') {
     const tip = document.getElementById('adminTipMessage');
-    tip.textContent = msg;
-    tip.className = 'tip-message ' + type;
+    tip.textContent = msg; tip.className = 'tip-message show ' + type;
+  }
+  function showRegisterTip(msg, type = 'info') {
+    const tip = document.getElementById('registerTipMessage');
+    tip.textContent = msg; tip.className = 'tip-message show ' + type;
   }
 
-  // 发送验证码（模拟）
+  // 密码显示切换
+  function togglePassword() {
+    const input = document.getElementById('passwordInput');
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
+  // 发送验证码
   function sendCode() {
     const account = document.getElementById('accountInput').value.trim();
-    if (!account) {
-      showTip('请先输入' + (loginType === 'phone' ? '手机号' : '邮箱'), 'error');
-      return;
-    }
-    if (loginType === 'phone' && !/^1\d{10}$/.test(account)) {
-      showTip('请输入正确的手机号', 'error');
-      return;
-    }
-    if (loginType === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(account)) {
-      showTip('请输入正确的邮箱', 'error');
-      return;
-    }
-
-    // 模拟生成验证码
+    if (!account) { showTip('请先输入手机号或邮箱', 'error'); return; }
     generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
     showTip('验证码已发送：' + generatedCode + '（演示环境，验证码直接显示）', 'info');
-
-    // 倒计时
     const btn = document.getElementById('sendCodeBtn');
-    let count = 60;
-    btn.disabled = true;
-    btn.textContent = count + 's后重发';
+    let count = 60; btn.disabled = true; btn.textContent = count + 's后重发';
     const timer = setInterval(() => {
-      count--;
-      btn.textContent = count + 's后重发';
-      if (count <= 0) {
-        clearInterval(timer);
-        btn.disabled = false;
-        btn.textContent = '获取验证码';
-      }
+      count--; btn.textContent = count + 's后重发';
+      if (count <= 0) { clearInterval(timer); btn.disabled = false; btn.textContent = '获取验证码'; }
     }, 1000);
   }
 
   // 用户登录
   function handleLogin(e) {
     e.preventDefault();
-    const account = document.getElementById('accountInput').value.trim();
-    const users = getAllUsers();
     const now = new Date().toLocaleString('zh-CN');
+    let account = '';
 
-    if (loginMode === 'code') {
-      const code = document.getElementById('codeInput').value.trim();
-      if (!generatedCode) {
-        showTip('请先获取验证码', 'error');
-        return;
-      }
-      if (code !== generatedCode) {
-        showTip('验证码错误', 'error');
-        return;
-      }
-    } else {
+    if (loginMode === 'account') {
+      account = document.getElementById('usernameInput').value.trim();
       const password = document.getElementById('passwordInput').value;
-      if (!password) {
-        showTip('请输入密码', 'error');
-        return;
-      }
-      // 验证密码
+      if (!account) { showTip('请输入用户名', 'error'); return; }
+      if (!password) { showTip('请输入密码', 'error'); return; }
+      const users = getAllUsers();
       if (users[account] && users[account].password) {
-        if (users[account].password !== password) {
-          showTip('密码错误', 'error');
-          return;
-        }
+        if (users[account].password !== password) { showTip('密码错误', 'error'); return; }
       } else {
-        // 新用户首次密码登录，自动设置密码
         if (!users[account]) {
-          saveUser(account, { account, password, role: 'user', createdAt: now, phone: loginType === 'phone' ? account : '', email: loginType === 'email' ? account : '' });
+          saveUser(account, { account, password, role: 'user', createdAt: now, phone: '', email: '' });
         } else {
           saveUser(account, { password });
         }
       }
+    } else {
+      account = document.getElementById('accountInput').value.trim();
+      const code = document.getElementById('codeInput').value.trim();
+      if (!account) { showTip('请输入手机号或邮箱', 'error'); return; }
+      if (!generatedCode) { showTip('请先获取验证码', 'error'); return; }
+      if (code !== generatedCode) { showTip('验证码错误', 'error'); return; }
+      const users = getAllUsers();
+      if (!users[account]) {
+        saveUser(account, { account, password: '', role: 'user', createdAt: now, phone: account.includes('@') ? '' : account, email: account.includes('@') ? account : '' });
+      }
     }
 
-    // 新用户自动注册
-    if (!users[account]) {
-      saveUser(account, { account, password: '', role: 'user', createdAt: now, phone: loginType === 'phone' ? account : '', email: loginType === 'email' ? account : '' });
-    }
-
-    // 更新最后登录时间
     saveUser(account, { lastLogin: now });
-
-    // 登录成功
     localStorage.setItem('cscec_logged_in', 'true');
     localStorage.setItem('cscec_account', account);
     localStorage.setItem('cscec_role', 'user');
-    logOperation(account, '用户登录', loginType === 'phone' ? '手机号登录' : '邮箱登录');
-    showTip('登录成功，正在跳转...', 'info');
-    setTimeout(() => {
-      window.location.href = './app/';
-    }, 1000);
+    logOperation(account, '用户登录', loginMode === 'account' ? '账号密码登录' : '手机/邮箱登录');
+    showTip('登录成功，正在跳转...', 'success');
+    setTimeout(() => { window.location.href = './app/'; }, 1000);
   }
 
   // 管理员登录
@@ -625,26 +600,21 @@
     const password = document.getElementById('adminPassword').value;
     const users = getAllUsers();
     const now = new Date().toLocaleString('zh-CN');
-
-    // 验证管理员账号
     const adminUser = users[account];
     if (adminUser && adminUser.role === 'admin' && adminUser.password === password) {
-      // 更新最后登录时间
       saveUser(account, { lastLogin: now });
       localStorage.setItem('cscec_logged_in', 'true');
       localStorage.setItem('cscec_account', account);
       localStorage.setItem('cscec_role', 'admin');
       logOperation(account, '管理员登录', '');
-      showAdminTip('管理员登录成功，正在跳转...', 'info');
-      setTimeout(() => {
-        window.location.href = './app/';
-      }, 1000);
+      showAdminTip('管理员登录成功，正在跳转...', 'success');
+      setTimeout(() => { window.location.href = './app/'; }, 1000);
     } else {
       showAdminTip('管理员账号或密码错误（提示：admin / admin123）', 'error');
     }
   }
 
-  // 切换面板
+  // 面板切换
   function showAdminPanel() {
     document.getElementById('userPanel').classList.add('hidden');
     document.getElementById('registerPanel').classList.remove('active');
@@ -661,32 +631,6 @@
     document.getElementById('registerPanel').classList.remove('active');
   }
 
-  // 注册提示
-  function showRegisterTip(msg, type = 'info') {
-    const tip = document.getElementById('registerTipMessage');
-    tip.textContent = msg;
-    tip.className = 'tip-message ' + type;
-  }
-
-  // 切换注册方式
-  function switchRegType(type) {
-    regType = type;
-    document.querySelectorAll('.login-tab[data-reg-type]').forEach(tab => {
-      tab.classList.toggle('active', tab.dataset.regType === type);
-    });
-    const label = document.getElementById('regAccountLabel');
-    const input = document.getElementById('regAccountInput');
-    if (type === 'phone') {
-      label.textContent = '手机号';
-      input.placeholder = '请输入手机号';
-      input.type = 'tel';
-    } else {
-      label.textContent = '邮箱';
-      input.placeholder = '请输入邮箱';
-      input.type = 'email';
-    }
-  }
-
   // 用户注册
   function handleRegister(e) {
     e.preventDefault();
@@ -696,48 +640,20 @@
     const users = getAllUsers();
     const now = new Date().toLocaleString('zh-CN');
 
-    // 验证
-    if (!account) {
-      showRegisterTip('请输入' + (regType === 'phone' ? '手机号' : '邮箱'), 'error');
-      return;
-    }
-    if (regType === 'phone' && !/^1\d{10}$/.test(account)) {
-      showRegisterTip('请输入正确的手机号', 'error');
-      return;
-    }
-    if (regType === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(account)) {
-      showRegisterTip('请输入正确的邮箱', 'error');
-      return;
-    }
-    if (!password || password.length < 6) {
-      showRegisterTip('密码至少6位', 'error');
-      return;
-    }
-    if (password !== confirmPassword) {
-      showRegisterTip('两次输入的密码不一致', 'error');
-      return;
-    }
-    if (users[account]) {
-      showRegisterTip('该账号已注册，请直接登录', 'error');
-      return;
-    }
+    if (!account) { showRegisterTip('请输入' + (regType === 'phone' ? '手机号' : '邮箱'), 'error'); return; }
+    if (regType === 'phone' && !/^1\d{10}$/.test(account)) { showRegisterTip('请输入正确的手机号', 'error'); return; }
+    if (regType === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(account)) { showRegisterTip('请输入正确的邮箱', 'error'); return; }
+    if (!password || password.length < 6) { showRegisterTip('密码至少6位', 'error'); return; }
+    if (password !== confirmPassword) { showRegisterTip('两次输入的密码不一致', 'error'); return; }
+    if (users[account]) { showRegisterTip('该账号已注册，请直接登录', 'error'); return; }
 
-    // 保存用户
-    saveUser(account, {
-      account,
-      password,
-      role: 'user',
-      createdAt: now,
-      lastLogin: '',
-      phone: regType === 'phone' ? account : '',
-      email: regType === 'email' ? account : '',
-    });
+    saveUser(account, { account, password, role: 'user', createdAt: now, lastLogin: '', phone: regType === 'phone' ? account : '', email: regType === 'email' ? account : '' });
     logOperation(account, '用户注册', regType === 'phone' ? '手机号注册' : '邮箱注册');
-
     showRegisterTip('注册成功，正在跳转登录...', 'success');
     setTimeout(() => {
       showUserPanel();
-      document.getElementById('accountInput').value = account;
+      switchLoginMode('account');
+      document.getElementById('usernameInput').value = account;
     }, 1500);
   }
 
