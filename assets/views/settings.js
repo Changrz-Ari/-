@@ -972,3 +972,148 @@ export async function runDestructiveDataAction({ action, clear, afterClear, noti
 async function collectBusinessData() {
   return Object.fromEntries(await Promise.all(Object.values(STORES).map(async store => [store, await dbGetAll(store)])));
 }
+
+// 管理员系统面板
+function renderAdminTab(ctx) {
+  const isAdmin = localStorage.getItem('cscec_role') === 'admin';
+  const adminAccount = localStorage.getItem('cscec_account') || 'admin';
+  const { storageEstimate, engine } = ctx;
+
+  if (!isAdmin) {
+    return `
+      <div class="rounded-lg border border-red-200 bg-red-50 p-8 text-center">
+        <span class="material-symbols-outlined text-4xl text-red-500">block</span>
+        <h3 class="mt-3 text-lg font-semibold text-red-700">权限不足</h3>
+        <p class="mt-2 text-sm text-red-600">您不是系统管理员，无法访问此页面。</p>
+        <p class="mt-1 text-xs text-red-500">请使用管理员账号登录后访问。</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="space-y-4">
+      <!-- 管理员信息 -->
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 xl:col-span-4 rounded-lg border border-slate-200 bg-white p-5">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="h-12 w-12 rounded-lg bg-blue-600 text-white flex items-center justify-center">
+              <span class="material-symbols-outlined text-2xl">admin_panel_settings</span>
+            </div>
+            <div>
+              <div class="text-base font-semibold text-slate-800">系统管理员</div>
+              <div class="text-sm text-slate-500">${adminAccount}</div>
+            </div>
+          </div>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between"><span class="text-slate-500">角色</span><span class="font-medium text-blue-600">超级管理员</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">权限</span><span class="font-medium text-green-600">全部权限</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">登录状态</span><span class="font-medium text-green-600">已登录</span></div>
+          </div>
+        </div>
+
+        <!-- 系统信息 -->
+        <div class="col-span-12 xl:col-span-4 rounded-lg border border-slate-200 bg-white p-5">
+          <h3 class="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-blue-600">info</span>系统信息
+          </h3>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between"><span class="text-slate-500">系统版本</span><span class="font-medium">v6.15</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">存储已用</span><span class="font-medium">${storageEstimate?.label || '-'}</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">数据条目</span><span class="font-medium">${engine?.totalItems || 0} 条</span></div>
+            <div class="flex justify-between"><span class="text-slate-500">运行环境</span><span class="font-medium">浏览器本地</span></div>
+          </div>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="col-span-12 xl:col-span-4 rounded-lg border border-slate-200 bg-white p-5">
+          <h3 class="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-blue-600">bolt</span>快捷操作
+          </h3>
+          <div class="space-y-2">
+            <button onclick="adminClearCache()" class="w-full text-left px-3 py-2 rounded-md bg-slate-50 hover:bg-slate-100 text-sm text-slate-700 flex items-center gap-2 transition">
+              <span class="material-symbols-outlined text-base text-slate-500">delete_sweep</span>清理系统缓存
+            </button>
+            <button onclick="adminExportLog()" class="w-full text-left px-3 py-2 rounded-md bg-slate-50 hover:bg-slate-100 text-sm text-slate-700 flex items-center gap-2 transition">
+              <span class="material-symbols-outlined text-base text-slate-500">download</span>导出系统日志
+            </button>
+            <button onclick="adminLogout()" class="w-full text-left px-3 py-2 rounded-md bg-red-50 hover:bg-red-100 text-sm text-red-600 flex items-center gap-2 transition">
+              <span class="material-symbols-outlined text-base">logout</span>退出管理员登录
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 用户管理 -->
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <h3 class="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-blue-600">group</span>用户管理
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-slate-200 text-left text-slate-500">
+                <th class="pb-3 pr-4 font-medium">账号</th>
+                <th class="pb-3 pr-4 font-medium">角色</th>
+                <th class="pb-3 pr-4 font-medium">登录时间</th>
+                <th class="pb-3 pr-4 font-medium">状态</th>
+                <th class="pb-3 font-medium">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-100">
+                <td class="py-3 pr-4 font-medium text-slate-800">${adminAccount}</td>
+                <td class="py-3 pr-4"><span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 text-xs">超级管理员</span></td>
+                <td class="py-3 pr-4 text-slate-600">当前会话</td>
+                <td class="py-3 pr-4"><span class="px-2 py-0.5 rounded bg-green-100 text-green-700 text-xs">在线</span></td>
+                <td class="py-3"><button class="text-blue-600 hover:text-blue-800 text-xs">查看详情</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-3 text-xs text-slate-400">* 演示环境，用户管理功能为模拟展示。完整用户管理需后端服务支持。</p>
+      </div>
+
+      <!-- 系统公告 -->
+      <div class="rounded-lg border border-slate-200 bg-white p-5">
+        <h3 class="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-blue-600">campaign</span>系统公告管理
+        </h3>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">公告标题</label>
+            <input type="text" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="请输入公告标题" value="系统维护通知" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1">公告内容</label>
+            <textarea class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3" placeholder="请输入公告内容">系统将于每周日凌晨进行数据维护，期间可能短暂无法访问，请提前备份数据。</textarea>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="adminSaveNotice()" class="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition">发布公告</button>
+            <button class="px-4 py-2 bg-slate-100 text-slate-700 text-sm rounded-md hover:bg-slate-200 transition">重置</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// 管理员操作函数
+window.adminClearCache = function() {
+  if (confirm('确定要清理系统缓存吗？这不会删除您的业务数据。')) {
+    alert('系统缓存已清理');
+  }
+};
+window.adminExportLog = function() {
+  alert('系统日志已导出（演示功能）');
+};
+window.adminLogout = function() {
+  if (confirm('确定要退出管理员登录吗？')) {
+    localStorage.removeItem('cscec_logged_in');
+    localStorage.removeItem('cscec_account');
+    localStorage.removeItem('cscec_role');
+    window.location.href = '../';
+  }
+};
+window.adminSaveNotice = function() {
+  alert('公告已发布（演示功能）');
+};
