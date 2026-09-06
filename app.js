@@ -8,6 +8,9 @@ import * as costEstimation from './assets/views/costEstimation.js?v=6.15&build=2
 import * as indicators from './assets/views/indicators.js?v=6.15';
 import * as experience from './assets/views/experience.js?v=6.15';
 import * as settings  from './assets/views/settings.js?v=6.15';
+import * as organization from './assets/views/organization.js?v=6.15';
+import * as personalSettings from './assets/views/personalSettings.js?v=6.15';
+import * as adminSettings from './assets/views/adminSettings.js?v=6.15';
 import * as ai        from './assets/views/ai.js?v=6.15';
 import * as resources from './assets/views/resources.js?v=6.15';
 import { searchAll, searchGroups } from './assets/services/globalSearchService.js?v=6.15';

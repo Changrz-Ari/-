@@ -339,6 +339,10 @@
         <button type="submit" class="login-btn">登 录</button>
       </form>
 
+      <div class="register-entry">
+        <span class="register-link" onclick="showRegisterPanel()">没有账号？立即注册 →</span>
+      </div>
+
       <div class="admin-entry">
         <span class="admin-link" onclick="showAdminPanel()">管理员登录 →</span>
       </div>
@@ -367,6 +371,44 @@
       </form>
     </div>
 
+    <!-- 注册面板 -->
+    <div class="register-panel" id="registerPanel">
+      <span class="back-link" onclick="showUserPanel()">← 返回登录</span>
+      <div class="login-header">
+        <div class="login-title">用户注册</div>
+        <div class="login-subtitle">创建您的账号</div>
+      </div>
+
+      <div class="tip-message" id="registerTipMessage"></div>
+
+      <form id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label class="form-label">注册方式</label>
+          <div class="login-tabs" style="margin-bottom: 15px;">
+            <button type="button" class="login-tab active" data-reg-type="phone" onclick="switchRegType('phone')">手机号注册</button>
+            <button type="button" class="login-tab" data-reg-type="email" onclick="switchRegType('email')">邮箱注册</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" id="regAccountLabel">手机号</label>
+          <input type="text" class="form-input" id="regAccountInput" placeholder="请输入手机号" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">设置密码</label>
+          <input type="password" class="form-input" id="regPasswordInput" placeholder="请设置密码（至少6位）" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">确认密码</label>
+          <input type="password" class="form-input" id="regConfirmPasswordInput" placeholder="请再次输入密码" required />
+        </div>
+
+        <button type="submit" class="login-btn">注 册</button>
+      </form>
+    </div>
+
   </div>
 </div>
 
@@ -376,6 +418,47 @@
 </div>
 
 <script>
+  // ===== 用户系统工具函数 =====
+  // 获取所有用户
+  function getAllUsers() {
+    return JSON.parse(localStorage.getItem('cscec_users') || '{}');
+  }
+  // 保存用户信息
+  function saveUser(account, data) {
+    const users = getAllUsers();
+    users[account] = { ...users[account], ...data };
+    localStorage.setItem('cscec_users', JSON.stringify(users));
+  }
+  // 记录操作日志
+  function logOperation(account, action, detail = '') {
+    const logs = JSON.parse(localStorage.getItem('cscec_operation_logs') || '[]');
+    logs.unshift({
+      id: Date.now(),
+      account,
+      action,
+      detail,
+      timestamp: new Date().toLocaleString('zh-CN'),
+    });
+    if (logs.length > 500) logs.length = 500;
+    localStorage.setItem('cscec_operation_logs', JSON.stringify(logs));
+  }
+  // 初始化默认管理员账号
+  (function initAdmin() {
+    const users = getAllUsers();
+    if (!users['admin']) {
+      users['admin'] = {
+        account: 'admin',
+        password: 'admin123',
+        phone: '',
+        email: '',
+        role: 'admin',
+        createdAt: new Date().toLocaleString('zh-CN'),
+        lastLogin: '',
+      };
+      localStorage.setItem('cscec_users', JSON.stringify(users));
+    }
+  })();
+
   // 背景轮播
   let currentSlide = 0;
   const slides = document.querySelectorAll('.bg-slide');
@@ -389,6 +472,7 @@
   let loginType = 'phone'; // phone / email
   let loginMode = 'code';  // code / password
   let generatedCode = '';
+  let regType = 'phone';   // 注册方式
 
   // 切换登录方式（手机号/邮箱）
   function switchLoginType(type) {
@@ -471,6 +555,8 @@
   function handleLogin(e) {
     e.preventDefault();
     const account = document.getElementById('accountInput').value.trim();
+    const users = getAllUsers();
+    const now = new Date().toLocaleString('zh-CN');
 
     if (loginMode === 'code') {
       const code = document.getElementById('codeInput').value.trim();
@@ -488,12 +574,35 @@
         showTip('请输入密码', 'error');
         return;
       }
+      // 验证密码
+      if (users[account] && users[account].password) {
+        if (users[account].password !== password) {
+          showTip('密码错误', 'error');
+          return;
+        }
+      } else {
+        // 新用户首次密码登录，自动设置密码
+        if (!users[account]) {
+          saveUser(account, { account, password, role: 'user', createdAt: now, phone: loginType === 'phone' ? account : '', email: loginType === 'email' ? account : '' });
+        } else {
+          saveUser(account, { password });
+        }
+      }
     }
+
+    // 新用户自动注册
+    if (!users[account]) {
+      saveUser(account, { account, password: '', role: 'user', createdAt: now, phone: loginType === 'phone' ? account : '', email: loginType === 'email' ? account : '' });
+    }
+
+    // 更新最后登录时间
+    saveUser(account, { lastLogin: now });
 
     // 登录成功
     localStorage.setItem('cscec_logged_in', 'true');
     localStorage.setItem('cscec_account', account);
     localStorage.setItem('cscec_role', 'user');
+    logOperation(account, '用户登录', loginType === 'phone' ? '手机号登录' : '邮箱登录');
     showTip('登录成功，正在跳转...', 'info');
     setTimeout(() => {
       window.location.href = './app/';
@@ -505,12 +614,18 @@
     e.preventDefault();
     const account = document.getElementById('adminAccount').value.trim();
     const password = document.getElementById('adminPassword').value;
+    const users = getAllUsers();
+    const now = new Date().toLocaleString('zh-CN');
 
-    // 预设管理员账号
-    if (account === 'admin' && password === 'admin123') {
+    // 验证管理员账号
+    const adminUser = users[account];
+    if (adminUser && adminUser.role === 'admin' && adminUser.password === password) {
+      // 更新最后登录时间
+      saveUser(account, { lastLogin: now });
       localStorage.setItem('cscec_logged_in', 'true');
       localStorage.setItem('cscec_account', account);
       localStorage.setItem('cscec_role', 'admin');
+      logOperation(account, '管理员登录', '');
       showAdminTip('管理员登录成功，正在跳转...', 'info');
       setTimeout(() => {
         window.location.href = './app/';
@@ -523,11 +638,98 @@
   // 切换面板
   function showAdminPanel() {
     document.getElementById('userPanel').classList.add('hidden');
+    document.getElementById('registerPanel').classList.remove('active');
     document.getElementById('adminPanel').classList.add('active');
+  }
+  function showRegisterPanel() {
+    document.getElementById('userPanel').classList.add('hidden');
+    document.getElementById('adminPanel').classList.remove('active');
+    document.getElementById('registerPanel').classList.add('active');
   }
   function showUserPanel() {
     document.getElementById('userPanel').classList.remove('hidden');
     document.getElementById('adminPanel').classList.remove('active');
+    document.getElementById('registerPanel').classList.remove('active');
+  }
+
+  // 注册提示
+  function showRegisterTip(msg, type = 'info') {
+    const tip = document.getElementById('registerTipMessage');
+    tip.textContent = msg;
+    tip.className = 'tip-message ' + type;
+  }
+
+  // 切换注册方式
+  function switchRegType(type) {
+    regType = type;
+    document.querySelectorAll('.login-tab[data-reg-type]').forEach(tab => {
+      tab.classList.toggle('active', tab.dataset.regType === type);
+    });
+    const label = document.getElementById('regAccountLabel');
+    const input = document.getElementById('regAccountInput');
+    if (type === 'phone') {
+      label.textContent = '手机号';
+      input.placeholder = '请输入手机号';
+      input.type = 'tel';
+    } else {
+      label.textContent = '邮箱';
+      input.placeholder = '请输入邮箱';
+      input.type = 'email';
+    }
+  }
+
+  // 用户注册
+  function handleRegister(e) {
+    e.preventDefault();
+    const account = document.getElementById('regAccountInput').value.trim();
+    const password = document.getElementById('regPasswordInput').value;
+    const confirmPassword = document.getElementById('regConfirmPasswordInput').value;
+    const users = getAllUsers();
+    const now = new Date().toLocaleString('zh-CN');
+
+    // 验证
+    if (!account) {
+      showRegisterTip('请输入' + (regType === 'phone' ? '手机号' : '邮箱'), 'error');
+      return;
+    }
+    if (regType === 'phone' && !/^1\d{10}$/.test(account)) {
+      showRegisterTip('请输入正确的手机号', 'error');
+      return;
+    }
+    if (regType === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(account)) {
+      showRegisterTip('请输入正确的邮箱', 'error');
+      return;
+    }
+    if (!password || password.length < 6) {
+      showRegisterTip('密码至少6位', 'error');
+      return;
+    }
+    if (password !== confirmPassword) {
+      showRegisterTip('两次输入的密码不一致', 'error');
+      return;
+    }
+    if (users[account]) {
+      showRegisterTip('该账号已注册，请直接登录', 'error');
+      return;
+    }
+
+    // 保存用户
+    saveUser(account, {
+      account,
+      password,
+      role: 'user',
+      createdAt: now,
+      lastLogin: '',
+      phone: regType === 'phone' ? account : '',
+      email: regType === 'email' ? account : '',
+    });
+    logOperation(account, '用户注册', regType === 'phone' ? '手机号注册' : '邮箱注册');
+
+    showRegisterTip('注册成功，正在跳转登录...', 'success');
+    setTimeout(() => {
+      showUserPanel();
+      document.getElementById('accountInput').value = account;
+    }, 1500);
   }
 
   // 如果已登录，直接跳转
